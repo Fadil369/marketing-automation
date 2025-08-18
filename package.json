@@ -1,0 +1,43 @@
+{
+  "name": "brainsait-marketing-dashboard",
+  "version": "1.0.0",
+  "description": "BrainSAIT AI Marketing Campaign Dashboard - Professional marketing automation platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler pages dev --port 3000",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "wrangler pages deploy . --project-name brainsait-marketing",
+    "deploy:production": "wrangler pages deploy . --project-name brainsait-marketing --branch main",
+    "preview": "wrangler pages dev --port 3000",
+    "test": "echo \"No tests configured\"",
+    "format": "prettier --write '**/*.{html,css,js,json}'",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [
+    "marketing",
+    "dashboard",
+    "ai",
+    "automation",
+    "brainsait",
+    "cloudflare",
+    "tiktok",
+    "instagram",
+    "snapchat"
+  ],
+  "author": "BrainSAIT",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "chart.js": "^3.9.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Fadil369/marketing-automation.git"
+  }
+}
