@@ -27,7 +27,7 @@
   "author": "BrainSAIT",
   "license": "MIT",
   "devDependencies": {
-    "wrangler": "^3.0.0",
+    "wrangler": "^4.30.0",
     "prettier": "^3.0.0"
   },
   "dependencies": {
