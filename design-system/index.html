@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainSAIT Design System - Enterprise Marketing Automation UI</title>
+    <meta name="description" content="Professional design system for BrainSAIT marketing automation platform with enterprise-grade components and accessibility">
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="brand-guidelines.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="advanced-patterns.css">
+    <link rel="stylesheet" href="marketing-ui.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Demo-specific styles */
+        body {
+            font-family: var(--bs-font-primary);
+            line-height: var(--bs-leading-normal);
+            color: var(--bs-text-primary);
+            background-color: var(--bs-bg-secondary);
+            margin: 0;
+            padding: 0;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--bs-space-8);
+        }
+
+        .demo-section {
+            margin-bottom: var(--bs-space-16);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--bs-space-6);
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: var(--bs-space-12);
+            padding: var(--bs-space-12) var(--bs-space-6);
+            background: var(--bs-gradient-brand);
+            color: white;
+            border-radius: var(--bs-radius-2xl);
+        }
+
+        .demo-title {
+            font-size: var(--bs-text-5xl);
+            font-weight: var(--bs-font-weight-bold);
+            margin-bottom: var(--bs-space-4);
+        }
+
+        .demo-subtitle {
+            font-size: var(--bs-text-xl);
+            opacity: 0.9;
+            margin-bottom: var(--bs-space-6);
+        }
+
+        .section-title {
+            font-size: var(--bs-text-3xl);
+            font-weight: var(--bs-font-weight-bold);
+            color: var(--bs-text-primary);
+            margin-bottom: var(--bs-space-6);
+            display: flex;
+            align-items: center;
+            gap: var(--bs-space-3);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 2rem;
+            background: var(--bs-gradient-primary);
+            border-radius: var(--bs-radius-full);
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--bs-space-3);
+        }
+
+        .color-swatch {
+            text-align: center;
+            border-radius: var(--bs-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--bs-shadow-md);
+        }
+
+        .color-preview {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: var(--bs-font-weight-semibold);
+            font-size: var(--bs-text-sm);
+        }
+
+        .color-info {
+            padding: var(--bs-space-3);
+            background-color: var(--bs-bg-primary);
+            font-size: var(--bs-text-xs);
+        }
+
+        .color-name {
+            font-weight: var(--bs-font-weight-semibold);
+            margin-bottom: var(--bs-space-1);
+        }
+
+        .typography-demo {
+            background-color: var(--bs-bg-primary);
+            padding: var(--bs-space-6);
+            border-radius: var(--bs-radius-xl);
+            border: 1px solid var(--bs-border-primary);
+        }
+
+        .font-specimen {
+            margin-bottom: var(--bs-space-4);
+            padding-bottom: var(--bs-space-4);
+            border-bottom: 1px solid var(--bs-border-primary);
+        }
+
+        .font-specimen:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .font-sample {
+            margin-bottom: var(--bs-space-2);
+        }
+
+        .font-details {
+            font-size: var(--bs-text-xs);
+            color: var(--bs-text-muted);
+        }
+
+        .component-showcase {
+            background-color: var(--bs-bg-primary);
+            padding: var(--bs-space-8);
+            border-radius: var(--bs-radius-xl);
+            border: 1px solid var(--bs-border-primary);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--bs-space-4);
+            margin-bottom: var(--bs-space-6);
+        }
+
+        .dashboard-preview {
+            background-color: var(--bs-bg-primary);
+            border-radius: var(--bs-radius-xl);
+            overflow: hidden;
+            box-shadow: var(--bs-shadow-lg);
+        }
+
+        .demo-theme-toggle {
+            position: fixed;
+            top: var(--bs-space-6);
+            right: var(--bs-space-6);
+            z-index: var(--bs-z-50);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="demo-theme-toggle bs-btn bs-btn-outline" onclick="toggleTheme()" aria-label="Toggle dark/light theme">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Dark Mode</span>
+    </button>
+
+    <div class="demo-container">
+        <!-- Header -->
+        <header class="demo-header">
+            <h1 class="demo-title">BrainSAIT Design System</h1>
+            <p class="demo-subtitle">Enterprise-Grade UI Components for Marketing Automation Platform</p>
+            <div class="bs-live-indicator">
+                Real-time Design System
+            </div>
+        </header>
+
+        <!-- Brand Guidelines -->
+        <section class="demo-section">
+            <h2 class="section-title">Brand Guidelines</h2>
+            
+            <!-- Color Palette -->
+            <div class="bs-card">
+                <div class="bs-card-header">
+                    <h3 class="bs-card-title">Professional Color Palette</h3>
+                    <p class="bs-card-subtitle">WCAG 2.1 AA compliant color system</p>
+                </div>
+                <div class="bs-card-body">
+                    <div class="color-palette">
+                        <div class="color-swatch">
+                            <div class="color-preview" style="background: var(--bs-primary-500);">Primary</div>
+                            <div class="color-info">
+                                <div class="color-name">Primary 500</div>
+                                <div class="color-value">#6366f1</div>
+                            </div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-preview" style="background: var(--bs-secondary-500);">Secondary</div>
+                            <div class="color-info">
+                                <div class="color-name">Secondary 500</div>
+                                <div class="color-value">#0ea5e9</div>
+                            </div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-preview" style="background: var(--bs-tertiary-500);">Success</div>
+                            <div class="color-info">
+                                <div class="color-name">Success 500</div>
+                                <div class="color-value">#22c55e</div>
+                            </div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-preview" style="background: var(--bs-warning-500);">Warning</div>
+                            <div class="color-info">
+                                <div class="color-name">Warning 500</div>
+                                <div class="color-value">#f59e0b</div>
+                            </div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-preview" style="background: var(--bs-error-500);">Error</div>
+                            <div class="color-info">
+                                <div class="color-name">Error 500</div>
+                                <div class="color-value">#ef4444</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typography -->
+            <div class="typography-demo">
+                <h3 style="margin-bottom: var(--bs-space-6);">Typography System</h3>
+                
+                <div class="font-specimen">
+                    <div class="font-sample" style="font-size: var(--bs-text-5xl); font-weight: var(--bs-font-weight-bold);">Display Heading</div>
+                    <div class="font-details">Inter Bold, 48px, Line Height: 1.2</div>
+                </div>
+                
+                <div class="font-specimen">
+                    <div class="font-sample" style="font-size: var(--bs-text-3xl); font-weight: var(--bs-font-weight-semibold);">Section Heading</div>
+                    <div class="font-details">Inter Semibold, 30px, Line Height: 1.25</div>
+                </div>
+                
+                <div class="font-specimen">
+                    <div class="font-sample" style="font-size: var(--bs-text-base); font-weight: var(--bs-font-weight-normal);">Body text with optimal readability for marketing automation interfaces. This paragraph demonstrates the default text styling used throughout the platform.</div>
+                    <div class="font-details">Inter Regular, 16px, Line Height: 1.5</div>
+                </div>
+                
+                <div class="font-specimen">
+                    <div class="font-sample" style="font-size: var(--bs-text-sm); color: var(--bs-text-muted);">Small text for captions and supplementary information</div>
+                    <div class="font-details">Inter Regular, 14px, Line Height: 1.5</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Library -->
+        <section class="demo-section">
+            <h2 class="section-title">Component Library</h2>
+            
+            <!-- Buttons -->
+            <div class="component-showcase">
+                <h3 style="margin-bottom: var(--bs-space-6);">Button Components</h3>
+                <div class="button-grid">
+                    <button class="bs-btn bs-btn-primary">Primary Button</button>
+                    <button class="bs-btn bs-btn-secondary">Secondary Button</button>
+                    <button class="bs-btn bs-btn-outline">Outline Button</button>
+                    <button class="bs-btn bs-btn-ghost">Ghost Button</button>
+                    <button class="bs-btn bs-btn-primary bs-btn-sm">Small Primary</button>
+                    <button class="bs-btn bs-btn-primary bs-btn-lg">Large Primary</button>
+                </div>
+
+                <!-- Form Components -->
+                <h4 style="margin: var(--bs-space-8) 0 var(--bs-space-4) 0;">Form Elements</h4>
+                <div class="demo-grid">
+                    <div class="bs-form-group">
+                        <label class="bs-label bs-label-required" for="demo-input">Campaign Name</label>
+                        <input class="bs-input" id="demo-input" type="text" placeholder="Enter campaign name">
+                        <div class="bs-help-text">Choose a descriptive name for your marketing campaign</div>
+                    </div>
+                    
+                    <div class="bs-form-group">
+                        <label class="bs-label" for="demo-select">Platform</label>
+                        <select class="bs-input bs-select" id="demo-select">
+                            <option>Select platform</option>
+                            <option>TikTok</option>
+                            <option>Instagram</option>
+                            <option>Snapchat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Badges and Status -->
+                <h4 style="margin: var(--bs-space-8) 0 var(--bs-space-4) 0;">Status Indicators</h4>
+                <div style="display: flex; gap: var(--bs-space-3); flex-wrap: wrap; margin-bottom: var(--bs-space-6);">
+                    <span class="bs-badge bs-badge-primary">Active Campaign</span>
+                    <span class="bs-badge bs-badge-success">Connected</span>
+                    <span class="bs-badge bs-badge-warning">Pending Review</span>
+                    <span class="bs-badge bs-badge-error">Error</span>
+                    <span class="bs-badge bs-badge-neutral">Draft</span>
+                </div>
+
+                <div style="display: flex; gap: var(--bs-space-6); flex-wrap: wrap;">
+                    <div class="bs-status-indicator bs-status-online">
+                        <div class="bs-status-dot"></div>
+                        <span>Platform Connected</span>
+                    </div>
+                    <div class="bs-status-indicator bs-status-pending">
+                        <div class="bs-status-dot"></div>
+                        <span>Sync in Progress</span>
+                    </div>
+                    <div class="bs-status-indicator bs-status-offline">
+                        <div class="bs-status-dot"></div>
+                        <span>Connection Lost</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketing-Specific Components -->
+        <section class="demo-section">
+            <h2 class="section-title">Marketing UI Components</h2>
+            
+            <!-- Campaign Card -->
+            <div class="demo-grid">
+                <div class="bs-campaign-card">
+                    <div class="bs-campaign-header">
+                        <h3 class="bs-campaign-title">Summer Product Launch</h3>
+                        <div class="bs-campaign-meta">
+                            <span class="bs-campaign-status active">Active</span>
+                            <span>Budget: $5,000</span>
+                        </div>
+                    </div>
+                    <div class="bs-campaign-body">
+                        <div class="bs-campaign-platforms">
+                            <div class="bs-platform-icon bs-platform-tiktok">TT</div>
+                            <div class="bs-platform-icon bs-platform-instagram">IG</div>
+                            <div class="bs-platform-icon bs-platform-snapchat">SC</div>
+                        </div>
+                        
+                        <div class="bs-campaign-stats">
+                            <div class="bs-stat-item">
+                                <span class="bs-stat-value">15.2K</span>
+                                <div class="bs-stat-label">Impressions</div>
+                            </div>
+                            <div class="bs-stat-item">
+                                <span class="bs-stat-value">8.4%</span>
+                                <div class="bs-stat-label">CTR</div>
+                            </div>
+                            <div class="bs-stat-item">
+                                <span class="bs-stat-value">$2.45</span>
+                                <div class="bs-stat-label">CPC</div>
+                            </div>
+                            <div class="bs-stat-item">
+                                <span class="bs-stat-value">342</span>
+                                <div class="bs-stat-label">Conversions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Card -->
+                <div class="bs-kpi-card">
+                    <div class="bs-kpi-header">
+                        <div class="bs-kpi-icon">📈</div>
+                        <div class="bs-kpi-trend positive">↗ +23.5%</div>
+                    </div>
+                    <div class="bs-kpi-value">$12,847</div>
+                    <div class="bs-kpi-label">Revenue This Month</div>
+                    <div class="bs-kpi-progress">
+                        <div class="bs-kpi-progress-bar" style="width: 67%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Integration -->
+            <div class="bs-integration-card" style="margin-top: var(--bs-space-6);">
+                <div class="bs-integration-header">
+                    <div class="bs-integration-status connected">Connected</div>
+                    <div class="bs-integration-logo bs-platform-tiktok">TT</div>
+                    <h3 class="bs-integration-title">TikTok for Business</h3>
+                    <p class="bs-integration-description">Connect your TikTok advertising account to manage campaigns and track performance metrics.</p>
+                </div>
+                <div class="bs-integration-body">
+                    <ul class="bs-integration-features">
+                        <li>Campaign management</li>
+                        <li>Real-time analytics</li>
+                        <li>Audience insights</li>
+                        <li>Creative optimization</li>
+                    </ul>
+                    <div class="bs-integration-actions">
+                        <button class="bs-btn bs-btn-primary bs-btn-sm">Manage Account</button>
+                        <button class="bs-btn bs-btn-outline bs-btn-sm">View Settings</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Patterns -->
+        <section class="demo-section">
+            <h2 class="section-title">Advanced UI Patterns</h2>
+            
+            <!-- Loading States -->
+            <div class="component-showcase">
+                <h3 style="margin-bottom: var(--bs-space-6);">Loading & Progress Indicators</h3>
+                
+                <div class="demo-grid">
+                    <div class="bs-content-loader">
+                        <div class="bs-loading-spinner"></div>
+                        <span>Loading campaign data...</span>
+                    </div>
+                    
+                    <div class="bs-skeleton-container">
+                        <div class="bs-skeleton-header">
+                            <div class="bs-skeleton bs-skeleton-avatar"></div>
+                            <div class="bs-skeleton-content">
+                                <div class="bs-skeleton bs-skeleton-line" style="width: 60%;"></div>
+                                <div class="bs-skeleton bs-skeleton-line" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bars -->
+                <h4 style="margin: var(--bs-space-6) 0 var(--bs-space-4) 0;">Progress Indicators</h4>
+                <div style="margin-bottom: var(--bs-space-4);">
+                    <div style="margin-bottom: var(--bs-space-2); font-size: var(--bs-text-sm); font-weight: var(--bs-font-weight-medium);">Campaign Setup Progress</div>
+                    <div class="bs-progress">
+                        <div class="bs-progress-bar" style="width: 75%;"></div>
+                    </div>
+                    <div style="margin-top: var(--bs-space-1); font-size: var(--bs-text-xs); color: var(--bs-text-muted);">75% Complete</div>
+                </div>
+
+                <!-- Circular Progress -->
+                <div class="bs-circular-progress">
+                    <svg viewBox="0 0 120 120">
+                        <circle class="bs-circular-progress-bg" cx="60" cy="60" r="54"></circle>
+                        <circle class="bs-circular-progress-bar" cx="60" cy="60" r="54" 
+                                stroke-dasharray="339.292" stroke-dashoffset="84.823"></circle>
+                    </svg>
+                    <div class="bs-circular-progress-text">75%</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-time Features -->
+        <section class="demo-section">
+            <h2 class="section-title">Real-time Features</h2>
+            
+            <div class="component-showcase">
+                <div class="demo-grid">
+                    <!-- Live Metrics -->
+                    <div style="text-align: center;">
+                        <h4 style="margin-bottom: var(--bs-space-4);">Live Campaign Metrics</h4>
+                        <div class="bs-counter bs-counter-updating" id="live-counter">1,247</div>
+                        <div style="margin-top: var(--bs-space-2); font-size: var(--bs-text-sm); color: var(--bs-text-muted);">Active Impressions</div>
+                    </div>
+                    
+                    <!-- Connection Status -->
+                    <div style="text-align: center;">
+                        <h4 style="margin-bottom: var(--bs-space-4);">Platform Status</h4>
+                        <div class="bs-connection-status bs-connection-excellent">
+                            <div class="bs-connection-strength">
+                                <div class="bs-connection-bar"></div>
+                                <div class="bs-connection-bar"></div>
+                                <div class="bs-connection-bar"></div>
+                                <div class="bs-connection-bar"></div>
+                            </div>
+                            <span>Excellent Connection</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Live Updates -->
+                <div style="margin-top: var(--bs-space-6); padding: var(--bs-space-4); background-color: var(--bs-bg-secondary); border-radius: var(--bs-radius-lg);">
+                    <h4 style="margin-bottom: var(--bs-space-3);">Recent Activity</h4>
+                    <div id="activity-feed">
+                        <div style="margin-bottom: var(--bs-space-2); font-size: var(--bs-text-sm);">
+                            <span class="bs-badge bs-badge-success">New</span>
+                            Campaign "Summer Sale" received 127 new clicks
+                        </div>
+                        <div style="margin-bottom: var(--bs-space-2); font-size: var(--bs-text-sm);">
+                            <span class="bs-badge bs-badge-primary">Update</span>
+                            TikTok integration synchronized successfully
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: var(--bs-space-12) 0; color: var(--bs-text-muted);">
+            <p>BrainSAIT Design System v1.0.0 | Enterprise Marketing Automation Platform</p>
+            <p style="margin-top: var(--bs-space-2);">Built with accessibility, performance, and scalability in mind</p>
+        </footer>
+    </div>
+
+    <!-- Demo JavaScript -->
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update button text and icon
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (newTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+
+        // Live counter animation
+        function animateCounter() {
+            const counter = document.getElementById('live-counter');
+            const currentValue = parseInt(counter.textContent.replace(',', ''));
+            const newValue = currentValue + Math.floor(Math.random() * 10) + 1;
+            
+            counter.classList.add('bs-counter-updating');
+            setTimeout(() => {
+                counter.textContent = newValue.toLocaleString();
+                counter.classList.remove('bs-counter-updating');
+            }, 300);
+        }
+
+        // Simulate live activity
+        function addActivity() {
+            const activities = [
+                'New lead captured from Instagram campaign',
+                'Campaign "Product Launch" budget updated',
+                'Snapchat ads performance improved by 15%',
+                'New conversion recorded from TikTok',
+                'Weekly report generated successfully'
+            ];
+            
+            const feed = document.getElementById('activity-feed');
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            
+            const newItem = document.createElement('div');
+            newItem.style.cssText = 'margin-bottom: var(--bs-space-2); font-size: var(--bs-text-sm); opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;';
+            newItem.innerHTML = `<span class="bs-badge bs-badge-primary">Live</span> ${activity}`;
+            
+            feed.insertBefore(newItem, feed.firstChild);
+            
+            // Animate in
+            requestAnimationFrame(() => {
+                newItem.style.opacity = '1';
+                newItem.style.transform = 'translateY(0)';
+            });
+            
+            // Remove old items
+            if (feed.children.length > 5) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            toggleTheme();
+        }
+
+        // Start animations
+        setInterval(animateCounter, 3000);
+        setInterval(addActivity, 5000);
+
+        // Accessibility: Announce important updates
+        function announceUpdate(message) {
+            const announcer = document.createElement('div');
+            announcer.setAttribute('aria-live', 'polite');
+            announcer.className = 'bs-sr-only';
+            announcer.textContent = message;
+            document.body.appendChild(announcer);
+            
+            setTimeout(() => {
+                document.body.removeChild(announcer);
+            }, 1000);
+        }
+
+        // Demo interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add hover effects and interactions
+            const cards = document.querySelectorAll('.bs-card, .bs-campaign-card, .bs-kpi-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-4px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

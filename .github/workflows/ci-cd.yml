@@ -1,0 +1,422 @@
+# BrainSAIT Marketing Platform - CI/CD Pipeline
+# Automated testing, building, and deployment workflow
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, staging, develop ]
+  pull_request:
+    branches: [ main, staging ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  NODE_VERSION: '18'
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+jobs:
+  # Code Quality and Testing
+  quality-check:
+    name: Code Quality & Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint:check
+
+    - name: Run formatting check
+      run: npm run format:check
+
+    - name: Run unit tests
+      run: npm run test:unit
+
+    - name: Run test coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/coverage-final.json
+        flags: unittests
+        name: codecov-umbrella
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: |
+          test-results/
+          coverage/
+
+  # Security Scanning
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: quality-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security audit
+      run: npm audit --audit-level moderate
+
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high
+
+    - name: CodeQL Analysis
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  # Build Application
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [quality-check, security-scan]
+    
+    strategy:
+      matrix:
+        environment: [staging, production]
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Set environment variables
+      run: |
+        if [ "${{ matrix.environment }}" == "production" ]; then
+          echo "ENVIRONMENT=production" >> $GITHUB_ENV
+          echo "API_BASE_URL=https://api.brainsait.io" >> $GITHUB_ENV
+        else
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "API_BASE_URL=https://staging-api.brainsait.io" >> $GITHUB_ENV
+        fi
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: ${{ matrix.environment }}
+        VITE_ENVIRONMENT: ${{ matrix.environment }}
+        VITE_API_BASE_URL: ${{ env.API_BASE_URL }}
+        VITE_VERSION: ${{ github.sha }}
+
+    - name: Run bundle analysis
+      run: npm run analyze
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ matrix.environment }}
+        path: |
+          dist/
+          bundle-analysis.json
+        retention-days: 30
+
+  # End-to-End Testing
+  e2e-tests:
+    name: E2E Testing
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-staging
+        path: dist/
+
+    - name: Start test server
+      run: npx http-server dist -p 3000 &
+      
+    - name: Wait for server
+      run: npx wait-on http://localhost:3000
+
+    - name: Run Playwright tests
+      run: npm run test:e2e
+      env:
+        BASE_URL: http://localhost:3000
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: playwright-results
+        path: |
+          test-results/
+          playwright-report/
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build, e2e-tests]
+    if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    environment:
+      name: staging
+      url: https://staging.reach.brainsait.io
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-staging
+        path: dist/
+
+    - name: Setup Wrangler
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    - name: Deploy to Cloudflare Pages (Staging)
+      run: |
+        npx wrangler pages deploy dist \
+          --project-name brainsait-marketing-staging \
+          --branch staging \
+          --compatibility-date 2024-01-01
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+    - name: Update staging environment variables
+      run: |
+        npx wrangler pages project set-env brainsait-marketing-staging \
+          --binding ENVIRONMENT=staging \
+          --binding API_BASE_URL=https://staging-api.brainsait.io \
+          --binding VERSION=${{ github.sha }}
+
+    - name: Run smoke tests
+      run: |
+        sleep 30  # Wait for deployment to propagate
+        curl -f https://staging.reach.brainsait.io/health || exit 1
+
+    - name: Notify deployment status
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        text: 'BrainSAIT Platform deployed to staging: https://staging.reach.brainsait.io'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build, deploy-staging]
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    environment:
+      name: production
+      url: https://reach.brainsait.io
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-production
+        path: dist/
+
+    - name: Setup Wrangler
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    - name: Deploy to Cloudflare Pages (Production)
+      run: |
+        npx wrangler pages deploy dist \
+          --project-name brainsait-marketing \
+          --branch main \
+          --compatibility-date 2024-01-01
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+    - name: Update production environment variables
+      run: |
+        npx wrangler pages project set-env brainsait-marketing \
+          --binding ENVIRONMENT=production \
+          --binding API_BASE_URL=https://api.brainsait.io \
+          --binding VERSION=${{ github.sha }}
+
+    - name: Run production smoke tests
+      run: |
+        sleep 30  # Wait for deployment to propagate
+        curl -f https://reach.brainsait.io/health || exit 1
+        curl -f https://reach.brainsait.io/api/version || exit 1
+
+    - name: Create GitHub release
+      if: github.ref == 'refs/heads/main'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: BrainSAIT Platform v${{ github.run_number }}
+        body: |
+          ## BrainSAIT Marketing Platform Release
+          
+          **Deployed:** ${{ github.sha }}
+          **Environment:** Production
+          **URL:** https://reach.brainsait.io
+          
+          ### Changes
+          ${{ github.event.head_commit.message }}
+          
+          ### Deployment Details
+          - Build: ${{ github.run_number }}
+          - Commit: ${{ github.sha }}
+          - Deployed by: ${{ github.actor }}
+        draft: false
+        prerelease: false
+
+    - name: Update monitoring dashboards
+      run: |
+        curl -X POST "${{ secrets.MONITORING_WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "event": "deployment",
+            "environment": "production",
+            "version": "${{ github.sha }}",
+            "url": "https://reach.brainsait.io"
+          }'
+
+    - name: Notify deployment status
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        text: '🚀 BrainSAIT Platform deployed to production: https://reach.brainsait.io'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # Performance Testing
+  performance-test:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install Lighthouse CI
+      run: npm install -g @lhci/cli
+
+    - name: Run Lighthouse CI
+      run: |
+        lhci autorun \
+          --upload.target=temporary-public-storage \
+          --collect.url=https://reach.brainsait.io \
+          --collect.numberOfRuns=3 \
+          --assert.assertions.performance=0.8 \
+          --assert.assertions.accessibility=0.9 \
+          --assert.assertions.best-practices=0.8 \
+          --assert.assertions.seo=0.8
+
+    - name: Upload Lighthouse results
+      uses: actions/upload-artifact@v3
+      with:
+        name: lighthouse-results
+        path: .lighthouseci/
+
+  # Cleanup
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production, performance-test]
+    if: always()
+    
+    steps:
+    - name: Delete old artifacts
+      uses: geekyeggo/delete-artifact@v2
+      with:
+        name: |
+          build-*
+          test-results
+        failOnError: false
+
+    - name: Cleanup old releases
+      uses: dev-drprasad/delete-older-releases@v0.3.2
+      with:
+        keep_latest: 10
+        delete_tag_pattern: "v"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
