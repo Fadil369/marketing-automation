@@ -26,6 +26,9 @@ command = "npm run build"
 cwd = "."
 watch_dir = ["src", "workers", "config"]
 
+# Pages build output directory
+pages_build_output_dir = "dist"
+
 # Asset uploading
 [build.upload]
 format = "modules"

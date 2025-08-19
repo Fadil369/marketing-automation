@@ -84,7 +84,7 @@ export class Router {
         
         this.routes.set(path, route);
         
-        this.eventBus.emit('router:route-registered', {
+        this.eventBus?.emit('router:route-registered', {
             path,
             name,
             meta,
@@ -92,6 +92,13 @@ export class Router {
         });
         
         return this;
+    }
+
+    /**
+     * Add route (alias for route method)
+     */
+    addRoute(path, handler, options = {}) {
+        return this.route(path, handler, options);
     }
 
     /**

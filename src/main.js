@@ -1,13 +1,21 @@
 /**
  * BrainSAIT Marketing Platform - Main Application Entry Point
- * Enterprise-grade marketing automation platform
+ * Enterprise-grade marketing automation platform with Modern UI
  * 
  * @author BrainSAIT Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import { Application } from './core/app/Application.js';
 import { environment } from './config/environment.js';
+import { ColorSystem, cssVariables, animationKeyframes } from './styles/ColorSystem.js';
+
+// Inject CSS variables and animations
+if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.textContent = cssVariables + animationKeyframes;
+    document.head.appendChild(style);
+}
 
 /**
  * Application bootstrap and initialization

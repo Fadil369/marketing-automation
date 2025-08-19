@@ -3,7 +3,7 @@
  * Handles backend API requests, authentication, and data processing
  */
 
-import { environmentConfig } from '../config/environment.js';
+// Environment configuration handled via Wrangler bindings
 
 // CORS headers
 const corsHeaders = {
@@ -22,88 +22,6 @@ const securityHeaders = {
     'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss:; font-src 'self' data:;"
 };
 
-/**
- * Main request handler
- */
-export default {
-    async fetch(request, env, ctx) {
-        const url = new URL(request.url);
-        const method = request.method;
-
-        // Handle CORS preflight
-        if (method === 'OPTIONS') {
-            return new Response(null, {
-                status: 204,
-                headers: corsHeaders
-            });
-        }
-
-        try {
-            // Route requests
-            const path = url.pathname;
-            
-            // Health check
-            if (path === '/health' || path === '/api/health') {
-                return handleHealth(request, env);
-            }
-
-            // Authentication endpoints
-            if (path.startsWith('/api/auth/')) {
-                return handleAuth(request, env, path);
-            }
-
-            // AI service endpoints
-            if (path.startsWith('/api/ai/')) {
-                return handleAI(request, env, path);
-            }
-
-            // Platform integration endpoints
-            if (path.startsWith('/api/platforms/')) {
-                return handlePlatforms(request, env, path);
-            }
-
-            // Analytics endpoints
-            if (path.startsWith('/api/analytics/')) {
-                return handleAnalytics(request, env, path);
-            }
-
-            // User management endpoints
-            if (path.startsWith('/api/users/')) {
-                return handleUsers(request, env, path);
-            }
-
-            // Campaign management endpoints
-            if (path.startsWith('/api/campaigns/')) {
-                return handleCampaigns(request, env, path);
-            }
-
-            // Content management endpoints
-            if (path.startsWith('/api/content/')) {
-                return handleContent(request, env, path);
-            }
-
-            // WebSocket upgrade for real-time features
-            if (path === '/ws' || path === '/api/ws') {
-                return handleWebSocket(request, env);
-            }
-
-            // File upload endpoints
-            if (path.startsWith('/api/upload/')) {
-                return handleUpload(request, env, path);
-            }
-
-            // Default 404
-            return createResponse({ error: 'Endpoint not found' }, 404);
-
-        } catch (error) {
-            console.error('Worker error:', error);
-            return createResponse({ 
-                error: 'Internal server error',
-                message: error.message 
-            }, 500);
-        }
-    }
-};
 
 /**
  * Health check handler
@@ -621,4 +539,62 @@ async function handleUpload(request, env, path) {
 }
 
 // Export for Cloudflare Workers
-export { default };
+export default {
+    async fetch(request, env, ctx) {
+        return handleRequest(request, env, ctx);
+    }
+};
+
+// Main request handler function
+async function handleRequest(request, env, ctx) {
+    const url = new URL(request.url);
+    const method = request.method;
+
+    // Handle CORS preflight
+    if (method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers: corsHeaders
+        });
+    }
+
+    try {
+        // Route requests
+        const path = url.pathname;
+        
+        // Health check
+        if (path === '/health' || path === '/api/health') {
+            return handleHealth(request, env);
+        }
+
+        // Authentication endpoints
+        if (path.startsWith('/api/auth/')) {
+            return handleAuth(request, env, path);
+        }
+
+        // AI service endpoints
+        if (path.startsWith('/api/ai/')) {
+            return handleAI(request, env, path);
+        }
+
+        // Platform integration endpoints
+        if (path.startsWith('/api/platforms/')) {
+            return handlePlatforms(request, env, path);
+        }
+
+        // Analytics endpoints
+        if (path.startsWith('/api/analytics/')) {
+            return handleAnalytics(request, env, path);
+        }
+
+        // Default 404
+        return createResponse({ error: 'Endpoint not found' }, 404);
+
+    } catch (error) {
+        console.error('Worker error:', error);
+        return createResponse({ 
+            error: 'Internal server error',
+            message: error.message 
+        }, 500);
+    }
+}

@@ -110,6 +110,20 @@ export class StateManager {
     }
 
     /**
+     * Watch state changes (alias for subscribe)
+     */
+    watch(key, callback, options = {}) {
+        return this.subscribe(key, callback, options);
+    }
+
+    /**
+     * Update state by merging with existing value
+     */
+    updateState(key, value, options = {}) {
+        return this.setState(key, value, { ...options, merge: true });
+    }
+
+    /**
      * Create computed properties that auto-update
      */
     computed(key, dependencies, computeFn) {

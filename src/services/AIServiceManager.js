@@ -850,6 +850,50 @@ export class AIServiceManager {
     }
 
     /**
+     * Get all available AI providers
+     */
+    getProviders() {
+        return Array.from(this.providers.keys());
+    }
+
+    /**
+     * Get content generation templates
+     */
+    getTemplates() {
+        return [
+            'social_media_post',
+            'blog_article',
+            'email_campaign',
+            'product_description',
+            'ad_copy',
+            'press_release',
+            'newsletter',
+            'landing_page',
+            'video_script',
+            'podcast_outline'
+        ];
+    }
+
+    /**
+     * Get provider information
+     */
+    getProviderInfo(providerName) {
+        return this.providers.get(providerName) || null;
+    }
+
+    /**
+     * Get AI service metrics
+     */
+    getMetrics() {
+        return {
+            ...this.metrics,
+            activeProviders: Array.from(this.providers.values()).filter(p => p.status === 'active').length,
+            totalProviders: this.providers.size,
+            queueLength: this.requestQueue.length
+        };
+    }
+
+    /**
      * Destroy AI service manager
      */
     destroy() {

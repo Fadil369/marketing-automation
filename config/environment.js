@@ -288,6 +288,26 @@ export class EnvironmentConfig {
     }
 
     /**
+     * Set configuration value
+     */
+    set(key, value) {
+        const keys = key.split('.');
+        let config = this.config;
+
+        // Navigate to the parent object
+        for (let i = 0; i < keys.length - 1; i++) {
+            const k = keys[i];
+            if (!config[k] || typeof config[k] !== 'object') {
+                config[k] = {};
+            }
+            config = config[k];
+        }
+
+        // Set the final value
+        config[keys[keys.length - 1]] = value;
+    }
+
+    /**
      * Get secret value
      */
     getSecret(key, defaultValue = null) {

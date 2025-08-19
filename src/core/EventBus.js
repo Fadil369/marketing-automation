@@ -59,11 +59,18 @@ export class EventBus {
     /**
      * Unsubscribe from an event
      */
-    off(eventName, listenerId) {
+    off(eventName, listenerIdOrCallback) {
         if (!this.events.has(eventName)) {return;}
 
         const listeners = this.events.get(eventName);
-        const index = listeners.findIndex(l => l.id === listenerId);
+        let index = -1;
+        
+        // Support both callback function and listener ID
+        if (typeof listenerIdOrCallback === 'function') {
+            index = listeners.findIndex(l => l.callback === listenerIdOrCallback);
+        } else {
+            index = listeners.findIndex(l => l.id === listenerIdOrCallback);
+        }
         
         if (index > -1) {
             listeners.splice(index, 1);
