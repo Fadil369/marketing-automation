@@ -3,14 +3,33 @@
  * Optimized for production builds with maximum optimization
  */
 
-import { merge } from 'webpack-merge';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { buildConfig } from './build.config.js';
-import { environmentConfig } from './config/environment.js';
+const { merge } = require('webpack-merge');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { GenerateSW } = require('workbox-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// For now, we'll use a simplified config without the full build system
+const isProduction = process.env.NODE_ENV === 'production';
+
+const baseConfig = {
+    entry: './src/core/Application.js',
+    resolve: {
+        extensions: ['.js', '.json'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            '@core': path.resolve(__dirname, 'src/core'),
+            '@services': path.resolve(__dirname, 'src/services'),
+            '@components': path.resolve(__dirname, 'src/components'),
+            '@assets': path.resolve(__dirname, 'src/assets'),
+        }
+    }
+};
 
 export default merge(buildConfig, {
     mode: 'production',
