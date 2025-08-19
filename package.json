@@ -129,7 +129,7 @@
     "webpack-dev-server": "^4.15.0",
     "webpack-merge": "^5.10.0",
     "workbox-webpack-plugin": "^7.0.0",
-    "wrangler": "^3.0.0"
+    "wrangler": "^4.30.0"
   },
   "engines": {
     "node": ">=18.0.0",
