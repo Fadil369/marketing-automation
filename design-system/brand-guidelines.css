@@ -1,0 +1,298 @@
+/* 
+=============================================================================
+BrainSAIT Marketing Automation Platform - Design System Foundation
+=============================================================================
+
+Enterprise-Grade Visual Identity & Brand Guidelines
+Professional color palette, typography, and design tokens for consistent UI/UX
+
+Author: BrainSAIT Design Team
+Version: 1.0.0
+Last Updated: 2025-08-18
+=============================================================================
+*/
+
+:root {
+  /* ===== BRAND COLORS ===== */
+  
+  /* Primary Brand Colors - BrainSAIT Professional Palette */
+  --bs-primary-50: #f0f4ff;
+  --bs-primary-100: #e0e9ff;
+  --bs-primary-200: #c7d6fe;
+  --bs-primary-300: #a5b7fc;
+  --bs-primary-400: #818cf8;
+  --bs-primary-500: #6366f1;  /* Main Brand Color */
+  --bs-primary-600: #4f46e5;
+  --bs-primary-700: #4338ca;
+  --bs-primary-800: #3730a3;
+  --bs-primary-900: #312e81;
+  --bs-primary-950: #1e1b4b;
+
+  /* Secondary Brand Colors - Professional Accent */
+  --bs-secondary-50: #f0f9ff;
+  --bs-secondary-100: #e0f2fe;
+  --bs-secondary-200: #bae6fd;
+  --bs-secondary-300: #7dd3fc;
+  --bs-secondary-400: #38bdf8;
+  --bs-secondary-500: #0ea5e9;  /* Secondary Brand Color */
+  --bs-secondary-600: #0284c7;
+  --bs-secondary-700: #0369a1;
+  --bs-secondary-800: #075985;
+  --bs-secondary-900: #0c4a6e;
+  --bs-secondary-950: #082f49;
+
+  /* Tertiary Colors - AI/Tech Accent */
+  --bs-tertiary-50: #f0fdf4;
+  --bs-tertiary-100: #dcfce7;
+  --bs-tertiary-200: #bbf7d0;
+  --bs-tertiary-300: #86efac;
+  --bs-tertiary-400: #4ade80;
+  --bs-tertiary-500: #22c55e;  /* Success/AI Color */
+  --bs-tertiary-600: #16a34a;
+  --bs-tertiary-700: #15803d;
+  --bs-tertiary-800: #166534;
+  --bs-tertiary-900: #14532d;
+  --bs-tertiary-950: #052e16;
+
+  /* Gradient Definitions */
+  --bs-gradient-primary: linear-gradient(135deg, var(--bs-primary-500) 0%, var(--bs-secondary-500) 100%);
+  --bs-gradient-secondary: linear-gradient(135deg, var(--bs-secondary-500) 0%, var(--bs-tertiary-500) 100%);
+  --bs-gradient-brand: linear-gradient(135deg, var(--bs-primary-600) 0%, var(--bs-primary-400) 50%, var(--bs-secondary-500) 100%);
+  --bs-gradient-ai: linear-gradient(135deg, var(--bs-tertiary-500) 0%, var(--bs-secondary-500) 100%);
+
+  /* ===== SEMANTIC COLORS ===== */
+  
+  /* Status Colors */
+  --bs-success-50: #f0fdf4;
+  --bs-success-500: #22c55e;
+  --bs-success-600: #16a34a;
+  
+  --bs-warning-50: #fffbeb;
+  --bs-warning-500: #f59e0b;
+  --bs-warning-600: #d97706;
+  
+  --bs-error-50: #fef2f2;
+  --bs-error-500: #ef4444;
+  --bs-error-600: #dc2626;
+  
+  --bs-info-50: #eff6ff;
+  --bs-info-500: #3b82f6;
+  --bs-info-600: #2563eb;
+
+  /* ===== NEUTRAL COLORS ===== */
+  
+  /* Light Theme Neutrals */
+  --bs-neutral-0: #ffffff;
+  --bs-neutral-50: #f8fafc;
+  --bs-neutral-100: #f1f5f9;
+  --bs-neutral-200: #e2e8f0;
+  --bs-neutral-300: #cbd5e1;
+  --bs-neutral-400: #94a3b8;
+  --bs-neutral-500: #64748b;
+  --bs-neutral-600: #475569;
+  --bs-neutral-700: #334155;
+  --bs-neutral-800: #1e293b;
+  --bs-neutral-900: #0f172a;
+  --bs-neutral-950: #020617;
+
+  /* ===== TYPOGRAPHY SYSTEM ===== */
+  
+  /* Font Families */
+  --bs-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --bs-font-secondary: 'Tajawal', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Arabic Support */
+  --bs-font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  /* Font Weights */
+  --bs-font-weight-light: 300;
+  --bs-font-weight-normal: 400;
+  --bs-font-weight-medium: 500;
+  --bs-font-weight-semibold: 600;
+  --bs-font-weight-bold: 700;
+  --bs-font-weight-extrabold: 800;
+  
+  /* Font Sizes - Modular Scale (1.250 - Major Third) */
+  --bs-text-xs: 0.75rem;     /* 12px */
+  --bs-text-sm: 0.875rem;    /* 14px */
+  --bs-text-base: 1rem;      /* 16px */
+  --bs-text-lg: 1.125rem;    /* 18px */
+  --bs-text-xl: 1.25rem;     /* 20px */
+  --bs-text-2xl: 1.5rem;     /* 24px */
+  --bs-text-3xl: 1.875rem;   /* 30px */
+  --bs-text-4xl: 2.25rem;    /* 36px */
+  --bs-text-5xl: 3rem;       /* 48px */
+  --bs-text-6xl: 3.75rem;    /* 60px */
+  --bs-text-7xl: 4.5rem;     /* 72px */
+  
+  /* Line Heights */
+  --bs-leading-none: 1;
+  --bs-leading-tight: 1.25;
+  --bs-leading-snug: 1.375;
+  --bs-leading-normal: 1.5;
+  --bs-leading-relaxed: 1.625;
+  --bs-leading-loose: 2;
+
+  /* ===== SPACING SYSTEM ===== */
+  
+  /* Spacing Scale - Fibonacci-inspired */
+  --bs-space-0: 0;
+  --bs-space-px: 1px;
+  --bs-space-0_5: 0.125rem;  /* 2px */
+  --bs-space-1: 0.25rem;     /* 4px */
+  --bs-space-1_5: 0.375rem;  /* 6px */
+  --bs-space-2: 0.5rem;      /* 8px */
+  --bs-space-2_5: 0.625rem;  /* 10px */
+  --bs-space-3: 0.75rem;     /* 12px */
+  --bs-space-3_5: 0.875rem;  /* 14px */
+  --bs-space-4: 1rem;        /* 16px */
+  --bs-space-5: 1.25rem;     /* 20px */
+  --bs-space-6: 1.5rem;      /* 24px */
+  --bs-space-7: 1.75rem;     /* 28px */
+  --bs-space-8: 2rem;        /* 32px */
+  --bs-space-10: 2.5rem;     /* 40px */
+  --bs-space-12: 3rem;       /* 48px */
+  --bs-space-16: 4rem;       /* 64px */
+  --bs-space-20: 5rem;       /* 80px */
+  --bs-space-24: 6rem;       /* 96px */
+  --bs-space-32: 8rem;       /* 128px */
+
+  /* ===== BORDER RADIUS ===== */
+  
+  --bs-radius-none: 0;
+  --bs-radius-sm: 0.125rem;   /* 2px */
+  --bs-radius-base: 0.25rem;  /* 4px */
+  --bs-radius-md: 0.375rem;   /* 6px */
+  --bs-radius-lg: 0.5rem;     /* 8px */
+  --bs-radius-xl: 0.75rem;    /* 12px */
+  --bs-radius-2xl: 1rem;      /* 16px */
+  --bs-radius-3xl: 1.5rem;    /* 24px */
+  --bs-radius-full: 9999px;
+
+  /* ===== SHADOWS ===== */
+  
+  --bs-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --bs-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --bs-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --bs-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --bs-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --bs-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --bs-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --bs-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Colored Shadows */
+  --bs-shadow-primary: 0 10px 15px -3px rgba(99, 102, 241, 0.1), 0 4px 6px -2px rgba(99, 102, 241, 0.05);
+  --bs-shadow-secondary: 0 10px 15px -3px rgba(14, 165, 233, 0.1), 0 4px 6px -2px rgba(14, 165, 233, 0.05);
+
+  /* ===== TRANSITIONS ===== */
+  
+  --bs-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --bs-transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --bs-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --bs-transition-all: all var(--bs-transition-base);
+
+  /* ===== Z-INDEX LAYERS ===== */
+  
+  --bs-z-auto: auto;
+  --bs-z-0: 0;
+  --bs-z-10: 10;
+  --bs-z-20: 20;
+  --bs-z-30: 30;
+  --bs-z-40: 40;
+  --bs-z-50: 50;
+  --bs-z-tooltip: 1000;
+  --bs-z-modal: 1100;
+  --bs-z-popover: 1200;
+  --bs-z-notification: 1300;
+  --bs-z-max: 9999;
+
+  /* ===== BREAKPOINTS ===== */
+  
+  --bs-breakpoint-sm: 640px;
+  --bs-breakpoint-md: 768px;
+  --bs-breakpoint-lg: 1024px;
+  --bs-breakpoint-xl: 1280px;
+  --bs-breakpoint-2xl: 1536px;
+}
+
+/* ===== DARK THEME OVERRIDES ===== */
+
+[data-theme="dark"] {
+  /* Background Colors */
+  --bs-bg-primary: var(--bs-neutral-900);
+  --bs-bg-secondary: var(--bs-neutral-800);
+  --bs-bg-tertiary: var(--bs-neutral-700);
+  --bs-bg-surface: var(--bs-neutral-800);
+  
+  /* Text Colors */
+  --bs-text-primary: var(--bs-neutral-50);
+  --bs-text-secondary: var(--bs-neutral-300);
+  --bs-text-muted: var(--bs-neutral-400);
+  
+  /* Border Colors */
+  --bs-border-primary: var(--bs-neutral-700);
+  --bs-border-secondary: var(--bs-neutral-600);
+  
+  /* Enhanced shadows for dark theme */
+  --bs-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --bs-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== LIGHT THEME DEFAULTS ===== */
+
+[data-theme="light"], :root {
+  /* Background Colors */
+  --bs-bg-primary: var(--bs-neutral-0);
+  --bs-bg-secondary: var(--bs-neutral-50);
+  --bs-bg-tertiary: var(--bs-neutral-100);
+  --bs-bg-surface: var(--bs-neutral-0);
+  
+  /* Text Colors */
+  --bs-text-primary: var(--bs-neutral-900);
+  --bs-text-secondary: var(--bs-neutral-600);
+  --bs-text-muted: var(--bs-neutral-500);
+  
+  /* Border Colors */
+  --bs-border-primary: var(--bs-neutral-200);
+  --bs-border-secondary: var(--bs-neutral-300);
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Typography Utilities */
+.bs-text-primary { color: var(--bs-text-primary); }
+.bs-text-secondary { color: var(--bs-text-secondary); }
+.bs-text-muted { color: var(--bs-text-muted); }
+
+/* Background Utilities */
+.bs-bg-primary { background-color: var(--bs-bg-primary); }
+.bs-bg-secondary { background-color: var(--bs-bg-secondary); }
+.bs-bg-tertiary { background-color: var(--bs-bg-tertiary); }
+
+/* Brand Color Utilities */
+.bs-text-brand { color: var(--bs-primary-500); }
+.bs-bg-brand { background: var(--bs-gradient-brand); }
+.bs-border-brand { border-color: var(--bs-primary-500); }
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+
+/* Focus Styles */
+.bs-focus {
+  outline: 2px solid var(--bs-primary-500);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --bs-transition-fast: 0ms;
+    --bs-transition-base: 0ms;
+    --bs-transition-slow: 0ms;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --bs-border-primary: var(--bs-neutral-900);
+    --bs-border-secondary: var(--bs-neutral-800);
+  }
+}

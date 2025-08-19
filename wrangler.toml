@@ -1,22 +1,72 @@
-# Cloudflare Pages Configuration for BrainSAIT Marketing Dashboard
+# Cloudflare Workers Configuration for BrainSAIT Marketing Platform
 name = "brainsait-marketing"
-compatibility_date = "2024-01-01"
+main = "workers/api.js"
+compatibility_date = "2023-10-30"
+compatibility_flags = ["nodejs_compat"]
+
+# Account configuration
+account_id = "${CLOUDFLARE_ACCOUNT_ID}"
+
+# Workers configuration
+workers_dev = true
+route = { pattern = "api.brainsait.com/*", zone_name = "brainsait.com" }
+
+# Memory and CPU limits
+limits = { cpu_ms = 50 }
+
+# Environment variables for all environments
+[vars]
+APP_NAME = "BrainSAIT Marketing Platform"
+APP_VERSION = "2.0.0"
+LOG_LEVEL = "info"
 
 # Build configuration
 [build]
-command = ""
-destination = "."
+command = "npm run build"
+cwd = "."
+watch_dir = ["src", "workers", "config"]
 
-# Custom domain configuration
-# After deployment, configure reach.brainsait.io in Cloudflare dashboard
-[[routes]]
-pattern = "reach.brainsait.io/*"
-zone_name = "brainsait.io"
+# Pages build output directory
+pages_build_output_dir = "dist"
 
-# Environment variables (add your API keys here)
-[vars]
+# Asset uploading
+[build.upload]
+format = "modules"
+dir = "dist"
+main = "./workers/api.js"
+
+# Development environment
+[env.development]
+name = "brainsait-marketing-dev"
+route = { pattern = "api-dev.brainsait.com/*", zone_name = "brainsait.com" }
+
+[env.development.vars]
+ENVIRONMENT = "development"
+DEBUG = "true"
+API_BASE_URL = "https://api-dev.brainsait.com"
+FRONTEND_URL = "https://dev.brainsait.com"
+
+# Staging environment
+[env.staging]
+name = "brainsait-marketing-staging"
+route = { pattern = "api-staging.brainsait.com/*", zone_name = "brainsait.com" }
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+DEBUG = "false"
+API_BASE_URL = "https://api-staging.brainsait.com"
+FRONTEND_URL = "https://staging.brainsait.com"
+
+# Production environment
+[env.production]
+name = "brainsait-marketing-prod"
+route = { pattern = "api.brainsait.com/*", zone_name = "brainsait.com" }
+
+[env.production.vars]
 ENVIRONMENT = "production"
-DASHBOARD_VERSION = "1.0.0"
+DEBUG = "false"
+API_BASE_URL = "https://api.brainsait.com"
+FRONTEND_URL = "https://app.brainsait.com"
 
 # Headers for security and performance
 [[headers]]
